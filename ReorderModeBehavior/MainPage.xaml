@@ -9,46 +9,56 @@
     xmlns:behaviors="using:ReorderModeBehavior.Behaviors"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <DataTemplate x:Key="PivotHeader">
+            <StackPanel>
+                <TextBlock Text="Selected User : "/>
+                <TextBlock Text="{Binding SelectedUser.Name}"/>
+            </StackPanel>
+        </DataTemplate>
+    </Page.Resources>
 
     <Pivot x:Name="layoutRoot"
            Title="Reorder Test">
         <PivotItem Header="List">
-            <ListView Name="UserListView" ItemsSource="{Binding Users, Mode=TwoWay}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Margin="0,60,0,60" Background="Red">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <i:Interaction.Behaviors>
-                                <i:BehaviorCollection>
-                                    <behaviors:EnableReorderModeBehavior ListView="{Binding ElementName=UserListView}" />
-                                </i:BehaviorCollection>
-                            </i:Interaction.Behaviors>
-                            <StackPanel Grid.Column="0">
-                                <TextBlock FontFamily="Segoe WP"
+            <ScrollViewer>
+                <ListView Name="UserListView" ItemsSource="{Binding Users, Mode=TwoWay}" HeaderTemplate="{StaticResource PivotHeader}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,60,0,60" Background="Red">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <i:Interaction.Behaviors>
+                                    <i:BehaviorCollection>
+                                        <behaviors:EnableReorderModeBehavior ListView="{Binding ElementName=UserListView}" SelectedItem="{Binding DataContext.SelectedUser, ElementName=UserListView, Mode=TwoWay}" />
+                                    </i:BehaviorCollection>
+                                </i:Interaction.Behaviors>
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock FontFamily="Segoe WP"
                                            FontSize="20"
                                            FontWeight="Normal"
                                            Text="{Binding Name}"
                                            TextTrimming="CharacterEllipsis" />
-                                <TextBlock FontFamily="Segoe WP"
+                                    <TextBlock FontFamily="Segoe WP"
                                            FontSize="16"
                                            FontWeight="Normal"
                                            Text="{Binding LastName}"
                                            TextTrimming="CharacterEllipsis" />
-                            </StackPanel>
-                            <TextBlock Grid.Column="2" Text="{Binding Order}"/>
-                        </Grid>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                    </Style>
-                </ListView.ItemContainerStyle>
-            </ListView>
+                                </StackPanel>
+                                <TextBlock Grid.Column="2" Text="{Binding Order}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
+            </ScrollViewer>
         </PivotItem>
     </Pivot>
 </Page>

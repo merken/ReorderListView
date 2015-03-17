@@ -75,8 +75,22 @@ namespace ReorderModeBehavior
         }
     }
 
-    public class MainPageDataContext : BindableBase
+    public class MainPageViewModel : BindableBase
     {
+        private User selectedUser;
+        public User SelectedUser
+        {
+            get
+            {
+                return selectedUser;
+            }
+            set
+            {
+                this.selectedUser = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private ObservableCollection<User> users;
         public ObservableCollection<User> Users
         {
@@ -102,8 +116,8 @@ namespace ReorderModeBehavior
             this.InitializeComponent();
 
             this.NavigationCacheMode = NavigationCacheMode.Required;
-            MainPageDataContext dtx = new MainPageDataContext();
-            dtx.Users = new ObservableCollection<User>
+            MainPageViewModel vm = new MainPageViewModel();
+            vm.Users = new ObservableCollection<User>
             {
                 new User{ Name = "Maarten",  LastName="Merken", Order=1},
                 new User{ Name = "John",  LastName="Doe", Order=2},
@@ -113,16 +127,17 @@ namespace ReorderModeBehavior
                 new User{ Name = "Jin",  LastName="Doe", Order=6}
             };
 
-            dtx.Users.CollectionChanged += (s, ea) =>
+            vm.Users.CollectionChanged += (s, ea) =>
             {
                 //The collection has been reordered!
                 int order = 1;
-                foreach (var user in dtx.Users)
+                foreach (var user in vm.Users)
                 {
                     user.Order = order++;
                 }
             };
-            this.DataContext = dtx;
+
+            this.DataContext = vm;
         }
 
         /// <summary>

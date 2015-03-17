@@ -6,6 +6,22 @@ namespace ReorderModeBehavior.Behaviors
 {
     public class EnableReorderModeBehavior : BehaviorBase<FrameworkElement>
     {
+        public object SelectedItem
+        {
+            get { return GetValue(SelectedItemProperty); }
+            set { SetValue(SelectedItemProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for MyProperty.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty SelectedItemProperty =
+            DependencyProperty.Register("SelectedItem", typeof(object), typeof(EnableReorderModeBehavior), new PropertyMetadata(null, SelectedItemPropertyChanged));
+
+        private static void SelectedItemPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var action = (EnableReorderModeBehavior)d;
+            action.SelectedItem = e.NewValue;
+        }
+
         public ListViewBase ListView
         {
             get { return (ListViewBase)GetValue(ListViewProperty); }
@@ -36,6 +52,8 @@ namespace ReorderModeBehavior.Behaviors
 
         private void ListViewPointerPressed(object sender, PointerRoutedEventArgs e)
         {
+            SelectedItem = (sender as FrameworkElement).DataContext;
+
             if (ListView != null && ListView.ReorderMode != ListViewReorderMode.Enabled)
             {
                 ListView.ReorderMode = ListViewReorderMode.Enabled;
